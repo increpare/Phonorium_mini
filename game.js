@@ -1,3 +1,5 @@
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+const audioCtx = new AudioContext();
 
 let canvas = document.getElementById('game');
 // get canvas context
@@ -45,6 +47,9 @@ function reOffset() {
 	cw = canvas.width;
 	ch = canvas.height;
 }
+
+let pressed = [false, false, false, false, false, false];
+
 let offsetX, offsetY;
 reOffset();
 window["onscroll"] = function (e) { reOffset(); }
@@ -88,7 +93,9 @@ function holZufälligeIntInklusi(min, max) {
 
 
 function playAudio(a) {
+	a.pause();
 	a.currentTime = 0;
+	a.load();
 	a.play();
 }
 
@@ -96,8 +103,8 @@ function leftmost(stück) {
 	let stück_h = stück.length;
 	let stück_b = stück[0].length;
 
-	for (var i = 0; i < stück_b; i++) {
-		for (var j = 0; j < stück_h; j++) {
+	for (let i = 0; i < stück_b; i++) {
+		for (let j = 0; j < stück_h; j++) {
 			if (stück[j][i] > 0) {
 				return i;
 			}
@@ -113,16 +120,16 @@ let soff = 0;
 function generatePattern() {
 	first_pattern_playthrough=true;
 	sound_pattern = [];
-	for (var i = 0; i < PATTERN_LAENGE; i++) {
+	for (let i = 0; i < PATTERN_LAENGE; i++) {
 		//pick a random integer 0-3
 		let r = Math.floor(Math.random() * 4);
 		sound_pattern.push(r);
 	}
 
 	//make sure the pattern contains every number (0-3) once
-	for (var i = 0; i < 4; i++) {
+	for (let i = 0; i < 4; i++) {
 		let found = false;
-		for (var j = 0; j < PATTERN_LAENGE; j++) {
+		for (let j = 0; j < PATTERN_LAENGE; j++) {
 			if (sound_pattern[j] == i) {
 				found = true;
 				break;
@@ -130,7 +137,7 @@ function generatePattern() {
 		}
 		if (!found) {
 			//remove a repeated element from sound_pattern
-			for (var j = 0; j < PATTERN_LAENGE; j++) {
+			for (let j = 0; j < PATTERN_LAENGE; j++) {
 				let element = sound_pattern[j];
 				if (sound_pattern.indexOf(element) < j) {
 					sound_pattern.splice(j, 1, i);
@@ -141,17 +148,12 @@ function generatePattern() {
 	}
 
 	//if you find three of the same element in a row, change one
-	for (var i = 2; i < PATTERN_LAENGE; i++) {
+	for (let i = 2; i < PATTERN_LAENGE; i++) {
 		if (sound_pattern[i] === sound_pattern[i - 1] && sound_pattern[i] === sound_pattern[i - 2]) {
 			sound_pattern[i] = (sound_pattern[i] + Math.floor(Math.random() * 3)) % 4;
 		}
 	}
 
-}
-
-for (var i = 0; i < 100; i++) {
-	generatePattern();
-	console.log(sound_pattern);
 }
 
 function redraw() {
@@ -168,21 +170,21 @@ function redraw() {
 	if (poweroff === false) {
 
 		if (winstate){
-			for (var i=0;i<3;i++){
+			for (let i=0;i<3;i++){
 				ctx.drawImage(images["phase_light_green"], 17 + 20 * i, 55);
 			}
 
-			for (var i=0;i<LEVEL_ZAHL;i++){
+			for (let i=0;i<LEVEL_ZAHL;i++){
 				ctx.drawImage(images["progress_light_orange"], 11 + 6 * i, 28);
 			}
 
-			for (var i=0;i<PATTERN_LAENGE;i++){				
+			for (let i=0;i<PATTERN_LAENGE;i++){				
 				ctx.drawImage(images["pattern_light_green"], 37 + 7 * i, 39);
 			}
 
 		} else {
 			//fortschrittleiste
-			for (var i = 0; i < level; i++) {
+			for (let i = 0; i < level; i++) {
 				ctx.drawImage(images["progress_light_purple"], 11 + 6 * i, 28);
 			}
 			ctx.drawImage(images["progress_light_orange"], 11 + 6 * level, 28);
@@ -198,7 +200,7 @@ function redraw() {
 				//input happening, draw lights up to phase_2_abspiel_position
 				if (input_pattern.length === PATTERN_LAENGE && !phase2_wait) {
 					if (phase2_flash === true) {
-						for (var i = 0; i < input_pattern.length; i++) {
+						for (let i = 0; i < input_pattern.length; i++) {
 							if (input_pattern[i] === sound_pattern[i]) {
 								ctx.drawImage(images["pattern_light_green"], 37 + 7 * i, 39);
 							} else {
@@ -207,7 +209,7 @@ function redraw() {
 						}
 					}
 				} else {
-					for (var i = 0; i < input_pattern.length; i++) {
+					for (let i = 0; i < input_pattern.length; i++) {
 						ctx.drawImage(images["pattern_light_purple"], 37 + 7 * i, 39);
 					}
 					if (input_pattern.length < PATTERN_LAENGE) {
@@ -299,11 +301,10 @@ let sfx_paths = [
 let sfx = [];
 
 for (let i = 0; i < sfx_paths.length; i++) {
-	var path = sfx_paths[i];
+	let path = sfx_paths[i];
 	//remove file extension from path
 	let name = path.substring(0, path.lastIndexOf('.'));
-	sfx[name] = new Audio();
-	sfx[name].src = "sfx/" + path;
+	sfx[name] = new Audio( "sfx/" + path);
 }
 //sounds
 let sound_paths = [
@@ -440,9 +441,8 @@ for (let i = 0; i < sound_paths.length; i++) {
 
 	let group = [];
 
-	for (var j = 0; j < path_group.length; j++) {
-		group[j] = new Audio();
-		group[j].src = "samples/" + path_group[j];
+	for (let j = 0; j < path_group.length; j++) {
+		group[j] = new Audio("samples/" + path_group[j]);
 	}
 
 	soundgroups.push(group);
@@ -484,28 +484,28 @@ async function playPattern() {
 	redraw();
 }
 
-async function pressButton(i) {
+async function pressButton(button_index) {
 	if (poweroff === true) {
 		return;
 	}
 
 	if (runde_phase === 0) {
-		playAudio(sounds[i]);
+		playAudio(sounds[button_index]);
 	} else if (runde_phase === 1) {
 		runde_phase = 2;
-		input_pattern = [i];
-		playAudio(sounds[i]);
+		input_pattern = [button_index];
+		playAudio(sounds[button_index]);
 		redraw();
 	} else if (runde_phase === 2) {
-		input_pattern.push(i);
-		playAudio(sounds[i]);
+		input_pattern.push(button_index);
+		playAudio(sounds[button_index]);
 		if (input_pattern.length === PATTERN_LAENGE) {
 			sequenz_spielend = true;
-			//wait for duration of sounds[i]
+			//wait for duration of sounds[button_index]
 			phase2_wait = true;
-			var curtime=time;
+			let curtime=time;
 			redraw();
-			await sleep(sounds[i].duration * 1000);	
+			await sleep(sounds[button_index].duration * 1000);	
 			phase2_wait = false;			
 			if (time>curtime){
 				redraw();
@@ -517,7 +517,7 @@ async function pressButton(i) {
 				playAudio(sfx["fail"]);
 
 			}
-			for (var i = 0; i < 5; i++) {
+			for (let i = 0; i < 5; i++) {
 				phase2_flash = (i % 2) === 0;								
 				if (time>curtime){
 					return;
@@ -653,8 +653,6 @@ function resetGame() {
 
 function handleTap(e) {
 
-	trySetupAudio();
-
 	let [mouseX, mouseY] = getMousePos(e);
 
 	for (let i = 0; i < image_x_y.length; i++) {
@@ -679,7 +677,7 @@ function handleTap(e) {
 		poweroff = !poweroff;
 		time++;
 		if (poweroff) {
-			for (var i=0;i<sounds.length;i++){
+			for (let i=0;i<sounds.length;i++){
 				sounds[i].pause();
 			}
 			playAudio(sfx["power_off"]);
@@ -708,19 +706,6 @@ function neighbors(x, y) {
 	return result;
 }
 
-function trySetupAudio() {
-	return;
-	if (music === null) {
-		music = new Audio('t1c.mp3');
-		music.loop = true;
-		music.volume = 0.5;
-		if (stumm == false) {
-			music.play();
-		}
-	}
-}
-
-let pressed = [false, false, false, false, false, false];
 
 canvas.addEventListener("pointerdown", handleTap);
 canvas.addEventListener("pointerup", handleUntap);
