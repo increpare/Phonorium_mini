@@ -421,8 +421,8 @@ let sound_progression = [
 	"_taps_trills",//
 	"_alv_v_ret",
 	"_dors",
-	"_ant_lab_vel_2",
 	"_vowels2",
+	"_ant_lab_vel_2",
 ];
 
 
