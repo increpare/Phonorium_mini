@@ -414,10 +414,10 @@ let sound_paths_flat = [
 
 let sound_progression = [
 	"_intro",
-	"_plos_phonation",
 	"_ant_fric",
-	"_vowel_phonation",
+	"_plos_phonation",
 	"_tones",
+	"_vowel_phonation",
 	"_taps_trills",//
 	"_alv_v_ret",
 	"_dors",
@@ -521,8 +521,8 @@ async function pressButton(button_index) {
 				playAudio(sfx["solve"]);
 			} else {
 				playAudio(sfx["fail"]);
-
 			}
+			redraw();
 			for (let i = 0; i < 5; i++) {
 				phase2_flash = (i % 2) === 0;
 				if (time > curtime) {
