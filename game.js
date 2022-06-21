@@ -11,7 +11,7 @@ let stumm = false;
 const LEVEL_ZAHL = 10;
 const PATTERN_LAENGE = 5;
 
-let winstate=false;
+let winstate = false;
 
 let poweroff = true;
 let level = 0;
@@ -34,7 +34,7 @@ let ch = canvas.height;
 
 let music = null;
 
-let first_pattern_playthrough=false;
+let first_pattern_playthrough = false;
 
 let sequenz_spielend = false;
 let time = 0;
@@ -118,7 +118,7 @@ function leftmost(stück) {
 
 let soff = 0;
 function generatePattern() {
-	first_pattern_playthrough=true;
+	first_pattern_playthrough = true;
 	sound_pattern = [];
 	for (let i = 0; i < PATTERN_LAENGE; i++) {
 		//pick a random integer 0-3
@@ -169,16 +169,16 @@ function redraw() {
 
 	if (poweroff === false) {
 
-		if (winstate){
-			for (let i=0;i<3;i++){
+		if (winstate) {
+			for (let i = 0; i < 3; i++) {
 				ctx.drawImage(images["phase_light_green"], 17 + 20 * i, 55);
 			}
 
-			for (let i=0;i<LEVEL_ZAHL;i++){
+			for (let i = 0; i < LEVEL_ZAHL; i++) {
 				ctx.drawImage(images["progress_light_orange"], 11 + 6 * i, 28);
 			}
 
-			for (let i=0;i<PATTERN_LAENGE;i++){				
+			for (let i = 0; i < PATTERN_LAENGE; i++) {
 				ctx.drawImage(images["pattern_light_green"], 37 + 7 * i, 39);
 			}
 
@@ -193,7 +193,7 @@ function redraw() {
 				//no special treatment needed
 			} else if (runde_phase === 1) {
 				//replay happening - draw position
-				if (phase_1_abspiel_position>=0){
+				if (phase_1_abspiel_position >= 0) {
 					ctx.drawImage(images["pattern_light_orange"], 37 + 7 * phase_1_abspiel_position, 39);
 				}
 			} else if (runde_phase === 2) {
@@ -304,135 +304,141 @@ for (let i = 0; i < sfx_paths.length; i++) {
 	let path = sfx_paths[i];
 	//remove file extension from path
 	let name = path.substring(0, path.lastIndexOf('.'));
-	sfx[name] = new Audio( "sfx/" + path);
+	sfx[name] = new Audio("sfx/" + path);
 }
+
+
 //sounds
-let sound_paths = [
-	[
-		"ant_lab_vel/ant_lab_vel_1.mp3",
-		"ant_lab_vel/ant_lab_vel_10.mp3",
-		"ant_lab_vel/ant_lab_vel_11.mp3",
-		"ant_lab_vel/ant_lab_vel_2.mp3",
-		"ant_lab_vel/ant_lab_vel_3.mp3",
-		"ant_lab_vel/ant_lab_vel_4.mp3",
-		"ant_lab_vel/ant_lab_vel_5.mp3",
-		"ant_lab_vel/ant_lab_vel_6.mp3",
-		"ant_lab_vel/ant_lab_vel_7.mp3",
-		"ant_lab_vel/ant_lab_vel_8.mp3",
-		"ant_lab_vel/ant_lab_vel_9.mp3",
-	],
-	[
-		"cor_affr/Voiced_alveolo-palatal_affricate.mp3",
-		"cor_affr/Voiced_palato-alveolar_affricate.mp3",
-		"cor_affr/Voiced_retroflex_affricate.mp3",
-		"cor_affr/Voiceless_alveolo-palatal_affricate.mp3",
-		"cor_affr/Voiceless_palato-alveolar_affricate.mp3",
-		"cor_affr/Voiceless_retroflex_affricate.mp3",
-	],
-	[
-		"cor_fric/Voiced_alveolo-palatal_fricative.mp3",
-		"cor_fric/Voiced_palatal_fricative.mp3",
-		"cor_fric/Voiced_postalveolar_fricative.mp3",
-		"cor_fric/Voiced_retroflex_fricative.mp3",
-		"cor_fric/Voiceless_alveolo-palatal_fricative.mp3",
-		"cor_fric/Voiceless_palatal_fricative.mp3",
-		"cor_fric/Voiceless_postalveolar_fricative.mp3",
-		"cor_fric/Voiceless_retroflex_fricative.mp3",
-	],
-	[
-		"dors/Voiced_pharyngeal_fricative.mp3",
-		"dors/Voiced_uvular_fricative.mp3",
-		"dors/Voiced_uvular_implosive.mp3",
-		"dors/Voiced_velar_approximant.mp3",
-		"dors/Voiced_velar_fricative.mp3",
-	],
-	[
-		"dors_glot_fric/Voiced_glottal_fricative.mp3",
-		"dors_glot_fric/Voiceless_dorso-palatal_velar_fricative.mp3",
-		"dors_glot_fric/Voiceless_glottal_fricative.mp3",
-		"dors_glot_fric/Voiceless_labio-velar_fricative.mp3",
-		"dors_glot_fric/Voiceless_pharyngeal_fricative.mp3",
-		"dors_glot_fric/Voiceless_uvular_fricative.mp3",
-		"dors_glot_fric/Voiceless_velar_fricative.mp3",
-	],
-	[
-		"ejectives/Alveolar_ejective_plosive.mp3",
-		"ejectives/Bilabial_ejective_plosive.mp3",
-		"ejectives/Glottal_stop.mp3",
-		"ejectives/Uvular_ejective_plosive.mp3",
-		"ejectives/Velar_ejective_plosive.mp3",
-	],
-	[
-		"epiglot/Glottal_stop.mp3",
-		"epiglot/Voiced_epiglottal_fricative.mp3",
-		"epiglot/Voiced_glottal_fricative.mp3",
-		"epiglot/Voiceless_epiglottal_fricative.mp3",
-		"epiglot/Voiceless_epiglottal_plosive.mp3",
-		"epiglot/Voiceless_glottal_fricative.mp3",
-	],
-	[
-		"lab_vel_cont/Labial-palatal_approximant.mp3",
-		"lab_vel_cont/Labiodental_approximant.mp3",
-		"lab_vel_cont/Velar_lateral_approximant.mp3",
-		"lab_vel_cont/Voiced_bilabial_fricative.mp3",
-		"lab_vel_cont/Voiced_labio-dental_fricative.mp3",
-		"lab_vel_cont/Voiced_labio-velar_approximant.mp3",
-	],
-	[
-		"nasals/Alveolar_nasal.mp3",
-		"nasals/Bilabial_nasal.mp3",
-		"nasals/Labiodental_nasal.mp3",
-		"nasals/Palatal_nasal.mp3",
-		"nasals/Retroflex_nasal.mp3",
-		"nasals/Uvular_nasal.mp3",
-		"nasals/Velar_nasal.mp3",
-	],
-	[
-		"plos_phonation/Aspirated_bilabial_stop.mp3",
-		"plos_phonation/Breathy_bilabial_stop.mp3",
-		"plos_phonation/Creaky_bilabial_stop.mp3",
-		"plos_phonation/Ejective_bilabial_stop.mp3",
-		"plos_phonation/Implosive_bilabial_stop.mp3",
-		"plos_phonation/Unaspirated_bilabial_stop.mp3",
-		"plos_phonation/Voiced_bilabial_stop.mp3",
-	],
-	[
-		"taps_trills/Alveolar_lateral_flap.mp3",
-		"taps_trills/Alveolar_tap.mp3",
-		"taps_trills/Alveolar_trill.mp3",
-		"taps_trills/Bilabial_trill.mp3",
-		"taps_trills/Labiodental_flap.mp3",
-		"taps_trills/Retroflex_flap.mp3",
-		"taps_trills/Uvular_trill.mp3",
-	],
-	[
-		"tones_v2/dipping.mp3",
-		"tones_v2/falling.mp3",
-		"tones_v2/high.mp3",
-		"tones_v2/low.mp3",
-		"tones_v2/mid.mp3",
-		"tones_v2/peaking.mp3",
-		"tones_v2/rising.mp3",
-	],
-	[
-		"vowels/Close-mid_back_rounded_vowel.mp3",
-		"vowels/Close-mid_central_rounded_vowel.mp3",
-		"vowels/Close-mid_front_rounded_vowel.mp3",
-		"vowels/Close_back_rounded_vowel.mp3",
-		"vowels/Close_central_rounded_vowel.mp3",
-		"vowels/Close_front_rounded_vowel.mp3",
-		"vowels/Mid-central_vowel.mp3",
-		"vowels/Near-close_near-back_rounded_vowel.mp3",
-		"vowels/Near-close_near-front_rounded_vowel.mp3",
-		"vowels/Near-open_central_unrounded_vowel.mp3",
-		"vowels/Near-open_front_unrounded_vowel.mp3",
-		"vowels/Open-mid_back_rounded_vowel.mp3",
-		"vowels/Open-mid_central_rounded_vowel.mp3",
-		"vowels/Open-mid_front_rounded_vowel.mp3",
-		"vowels/Open_back_rounded_vowel.mp3",
-		"vowels/Open_front_rounded_vowel.mp3",
-	]
+let sound_paths_flat = [
+	"_alv_obstr/Alveolar_ejective_fricative.mp3",
+	"_alv_obstr/Voiced_alveolar_affricate.mp3",
+	"_alv_obstr/Voiced_alveolar_fricative.mp3",
+	"_alv_obstr/Voiceless_alveolar_fricative.mp3",
+	"_alv_v_ret/Voiced_alveolar_plosive.mp3",
+	"_alv_v_ret/Voiced_retroflex_plosive.mp3",
+	"_alv_v_ret/Voiceless_alveolar_plosive.mp3",
+	"_alv_v_ret/Voiceless_retroflex_plosive.mp3",
+	"_ant_fric/Voiced_dental_fricative.mp3",
+	"_ant_fric/Voiceless_bilabial_fricative.mp3",
+	"_ant_fric/Voiceless_dental_fricative.mp3",
+	"_ant_fric/Voiceless_labiodental_fricative.mp3",
+	"_ant_lab_vel_1/ant_lab_vel_1.mp3",
+	"_ant_lab_vel_1/ant_lab_vel_2.mp3",
+	"_ant_lab_vel_1/ant_lab_vel_4.mp3",
+	"_ant_lab_vel_1/ant_lab_vel_5.mp3",
+	"_ant_lab_vel_2/ant_lab_vel_10.mp3",
+	"_ant_lab_vel_2/ant_lab_vel_11.mp3",
+	"_ant_lab_vel_2/ant_lab_vel_7.mp3",
+	"_ant_lab_vel_2/ant_lab_vel_8.mp3",
+	"_cor_affr/Voiced_alveolo-palatal_affricate.mp3",
+	"_cor_affr/Voiced_palato-alveolar_affricate.mp3",
+	"_cor_affr/Voiceless_alveolo-palatal_affricate.mp3",
+	"_cor_affr/Voiceless_palato-alveolar_affricate.mp3",
+	"_cor_fric_1/Voiced_postalveolar_fricative.mp3",
+	"_cor_fric_1/Voiced_retroflex_fricative.mp3",
+	"_cor_fric_1/Voiceless_postalveolar_fricative.mp3",
+	"_cor_fric_1/Voiceless_retroflex_fricative.mp3",
+	"_cor_fric_2/Voiced_alveolo-palatal_fricative.mp3",
+	"_cor_fric_2/Voiced_palatal_fricative.mp3",
+	"_cor_fric_2/Voiceless_alveolo-palatal_fricative.mp3",
+	"_cor_fric_2/Voiceless_palatal_fricative.mp3",
+	"_dors/Voiced_uvular_fricative.mp3",
+	"_dors/Voiced_uvular_implosive.mp3",
+	"_dors/Voiced_velar_approximant.mp3",
+	"_dors/Voiced_velar_fricative.mp3",
+	"_dors_glot_fric/Voiceless_glottal_fricative.mp3",
+	"_dors_glot_fric/Voiceless_pharyngeal_fricative.mp3",
+	"_dors_glot_fric/Voiceless_uvular_fricative.mp3",
+	"_dors_glot_fric/Voiceless_velar_fricative.mp3",
+	"_dors_stops/Voiced_palatal_plosive.mp3",
+	"_dors_stops/Voiceless_palatal_plosive.mp3",
+	"_dors_stops/Voiceless_uvular_plosive.mp3",
+	"_dors_stops/Voiceless_velar_plosive.mp3",
+	"_ejectives/Alveolar_ejective_plosive.mp3",
+	"_ejectives/Bilabial_ejective_plosive.mp3",
+	"_ejectives/Uvular_ejective_plosive.mp3",
+	"_ejectives/Velar_ejective_plosive.mp3",
+	"_epiglot/Voiced_epiglottal_fricative.mp3",
+	"_epiglot/Voiced_glottal_fricative.mp3",
+	"_epiglot/Voiceless_epiglottal_fricative.mp3",
+	"_epiglot/Voiceless_glottal_fricative.mp3",
+	"_lab_vel_cont/Labial-palatal_approximant.mp3",
+	"_lab_vel_cont/Labiodental_approximant.mp3",
+	"_lab_vel_cont/Velar_lateral_approximant.mp3",
+	"_lab_vel_cont/Voiced_labio-velar_approximant.mp3",
+	"_liquids/Alveolar_approximant.mp3",
+	"_liquids/Alveolar_lateral_approximant.mp3",
+	"_liquids/Retroflex_approximant.mp3",
+	"_liquids/Retroflex_lateral_approximant.mp3",
+	"_nasals/Alveolar_nasal.mp3",
+	"_nasals/Palatal_nasal.mp3",
+	"_nasals/Uvular_nasal.mp3",
+	"_nasals/Velar_nasal.mp3",
+	"_nas_vow/nasal_i.mp3",
+	"_nas_vow/nasal_i_plus_n.mp3",
+	"_nas_vow/oral_i.mp3",
+	"_nas_vow/oral_i_plus_n.mp3",
+	"_plos_phonation/Breathy_bilabial_stop.mp3",
+	"_plos_phonation/Creaky_bilabial_stop.mp3",
+	"_plos_phonation/Implosive_bilabial_stop.mp3",
+	"_plos_phonation/Voiced_bilabial_stop.mp3",
+	"_taps_trills/Alveolar_lateral_flap.mp3",
+	"_taps_trills/Alveolar_tap.mp3",
+	"_taps_trills/Alveolar_trill.mp3",
+	"_taps_trills/Retroflex_flap.mp3",
+	"_tones/Dipping.mp3",
+	"_tones/Falling.mp3",
+	"_tones/Peaking.mp3",
+	"_tones/Rising.mp3",
+	"_tones_v2/dipping.mp3",
+	"_tones_v2/falling.mp3",
+	"_tones_v2/peaking.mp3",
+	"_tones_v2/rising.mp3",
+	"_vowels1/Open-mid_back_rounded_vowel.mp3",
+	"_vowels1/Open-mid_central_rounded_vowel.mp3",
+	"_vowels1/Open-mid_front_rounded_vowel.mp3",
+	"_vowels1/Open_front_rounded_vowel.mp3",
+	"_vowels2/Close-mid_back_rounded_vowel.mp3",
+	"_vowels2/Close-mid_central_rounded_vowel.mp3",
+	"_vowels2/Close-mid_front_rounded_vowel.mp3",
+	"_vowels2/Near-close_near-front_rounded_vowel.mp3",
+	"_vowel_phonation/breathy_voice.mp3",
+	"_vowel_phonation/creaky_voice.mp3",
+	"_vowel_phonation/modal_voice.mp3",
+	"_vowel_phonation/voiceless.mp3",
+	"_intro/Alveolar_lateral_approximant.mp3",
+	"_intro/Near-open_central_unrounded_vowel.mp3",
+	"_intro/Voiced_alveolar_plosive.mp3",
+	"_intro/Voiceless_postalveolar_fricative.mp3",
 ];
+
+let sound_progression = [
+	"_intro",
+	"_plos_phonation",
+	"_ant_fric",
+	"_vowel_phonation",
+	"_tones",
+	"_taps_trills",//
+	"_alv_v_ret",
+	"_dors",
+	"_ant_lab_vel_2",
+	"_vowels2",
+];
+
+
+let sound_paths=[];
+for (let i=0;i<sound_progression.length;i++){
+	var dir = sound_progression[i];
+	let grouping=[];
+	//add all paths from sound_paths_flat to it that start with dir
+	for (let j=0;j<sound_paths_flat.length;j++){
+		if (sound_paths_flat[j].startsWith(dir)){
+			grouping.push(sound_paths_flat[j]);
+		}
+	}
+	
+	sound_paths.push(grouping);
+}
 
 let soundgroups = [];
 //load all sounds from sound_paths into sounds
@@ -465,7 +471,7 @@ async function playPattern() {
 		}
 	}
 
-	let curtime=time;
+	let curtime = time;
 	//loop throuhg pattern array
 	for (let i = 0; i < sound_pattern.length; i++) {
 		let sound = sounds[sound_pattern[i]];
@@ -474,13 +480,13 @@ async function playPattern() {
 		redraw();
 		//wait max_duration ms
 		await sleep(max_duration * 1000);
-		if (time>curtime){
-			first_pattern_playthrough=false;
+		if (time > curtime) {
+			first_pattern_playthrough = false;
 			return;
 		}
 	}
-	phase_1_abspiel_position=-1;
-	first_pattern_playthrough=false;
+	phase_1_abspiel_position = -1;
+	first_pattern_playthrough = false;
 	redraw();
 }
 
@@ -503,11 +509,11 @@ async function pressButton(button_index) {
 			sequenz_spielend = true;
 			//wait for duration of sounds[button_index]
 			phase2_wait = true;
-			let curtime=time;
+			let curtime = time;
 			redraw();
-			await sleep(sounds[button_index].duration * 1000);	
-			phase2_wait = false;			
-			if (time>curtime){
+			await sleep(sounds[button_index].duration * 1000);
+			phase2_wait = false;
+			if (time > curtime) {
 				redraw();
 				return;
 			}
@@ -518,13 +524,13 @@ async function pressButton(button_index) {
 
 			}
 			for (let i = 0; i < 5; i++) {
-				phase2_flash = (i % 2) === 0;								
-				if (time>curtime){
+				phase2_flash = (i % 2) === 0;
+				if (time > curtime) {
 					return;
 				}
 				redraw();
-				await sleep(100);								
-				if (time>curtime){
+				await sleep(100);
+				if (time > curtime) {
 					return;
 				}
 			}
@@ -533,14 +539,14 @@ async function pressButton(button_index) {
 
 			//check if input_pattern is correct
 			if (input_pattern.toString() === sound_pattern.toString()) {
-				if (level < LEVEL_ZAHL-1) {
+				if (level < LEVEL_ZAHL - 1) {
 					level++;
 					sounds = soundgroups[level];
 					runde_phase = 0;
 					generatePattern();
 				} else {
 					playAudio(sfx["win"]);
-					winstate=true;
+					winstate = true;
 				}
 			} else {
 				if (level > 0) {
@@ -564,12 +570,12 @@ function doPress(i) {
 		redraw();
 		return;
 	}
-	if (winstate){
+	if (winstate) {
 		redraw();
 		return;
 	}
 
-	if (runde_phase===1 && first_pattern_playthrough){
+	if (runde_phase === 1 && first_pattern_playthrough) {
 		redraw();
 		return;
 	}
@@ -643,7 +649,7 @@ function handleUntap(e) {
 }
 
 function resetGame() {
-	winstate=false;
+	winstate = false;
 	level = 0;
 	runde_phase = 0;
 	phase_1_abspiel_position = -1;
@@ -677,7 +683,7 @@ function handleTap(e) {
 		poweroff = !poweroff;
 		time++;
 		if (poweroff) {
-			for (let i=0;i<sounds.length;i++){
+			for (let i = 0; i < sounds.length; i++) {
 				sounds[i].pause();
 			}
 			playAudio(sfx["power_off"]);
@@ -705,7 +711,6 @@ function neighbors(x, y) {
 	}
 	return result;
 }
-
 
 canvas.addEventListener("pointerdown", handleTap);
 canvas.addEventListener("pointerup", handleUntap);
