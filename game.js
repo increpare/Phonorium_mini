@@ -8,6 +8,8 @@ let ctx = canvas.getContext('2d');
 
 let stumm = false;
 
+let prev_phase_badpattern=null;
+
 const LEVEL_ZAHL = 10;
 const PATTERN_LAENGE = 5;
 
@@ -62,6 +64,7 @@ reOffset();
 
 window["onscroll"] = function (e) { reOffset(); }
 window["onresize"] = function (e) { reOffset(); }
+screen.orientation.addEventListener('change', function (e) { reOffset(); });
 
 
 let score = 0;
@@ -199,6 +202,15 @@ function redraw() {
 
 			if (runde_phase === 0) {
 				//no special treatment needed
+				if (prev_phase_badpattern!==null){
+					for (let i = 0; i < input_pattern.length; i++) {
+						if (prev_phase_badpattern[i]) {
+							ctx.drawImage(images["pattern_light_green"], 37 + 7 * i, 39);
+						} else {
+							ctx.drawImage(images["pattern_light_red"], 37 + 7 * i, 39);
+						}
+					}
+				}
 			} else if (runde_phase === 1) {
 				//replay happening - draw position
 				if (phase_1_abspiel_position >= 0) {
@@ -529,7 +541,7 @@ async function pressButton(button_index) {
 				playAudio(sfx["turn_off"]);
 			}
 			redraw();
-			for (let i = 0; i < 5; i++) {
+			for (let i = 0; i < 6; i++) {
 				phase2_flash = (i % 2) === 0;
 				if (time > curtime) {
 					return;
@@ -545,6 +557,7 @@ async function pressButton(button_index) {
 
 			//check if input_pattern is correct
 			if (input_pattern.toString() === sound_pattern.toString()) {
+				prev_phase_badpattern=null;
 				if (level < LEVEL_ZAHL - 1) {
 					level++;
 					sounds = soundgroups[level];
@@ -558,6 +571,12 @@ async function pressButton(button_index) {
 				if (level > 0) {
 					level--;
 				}
+				
+				prev_phase_badpattern=[];
+				for (let i = 0; i < input_pattern.length; i++) {
+					prev_phase_badpattern.push(input_pattern[i] === sound_pattern[i]);
+				}
+
 				sounds = soundgroups[level];
 				runde_phase = 0;
 				generatePattern();
@@ -577,7 +596,7 @@ function playRandom(){
 	playAudio(random_sound);
 }
 function doPress(i) {
-
+	prev_phase_badpattern=null;
 
 	pressed[i] = true;
 
@@ -617,6 +636,7 @@ function doPress(i) {
 				} else {
 					if (runde_phase !== 1) {
 						runde_phase = 1;
+						prev_phase_badpattern=null;
 						generatePattern();
 					}
 					//call coroutine playPattern()
@@ -650,7 +670,7 @@ function getMousePos(evt) {
 	let x = (clientX - rect.left) * scaleX;   // scale mouse coordinates after they have
 	let y = (clientY - rect.top) * scaleY     // been adjusted to be relative to element
 
-	return [x, y];
+	return [Math.floor(x), Math.floor(y)];
 }
 
 let target = -1;
@@ -672,6 +692,7 @@ function resetGame() {
 	phase_1_abspiel_position = -1;
 	sound_pattern = [];
 	sounds = soundgroups[level];
+	prev_phase_badpattern=null;
 }
 
 function handleTap(e) {
@@ -695,7 +716,7 @@ function handleTap(e) {
 				//if distance is smaller than half of the rect's width, it's a hit
 				if (distance-2 < (x_max - x_min) / 2) {
 				} else {
-					return;
+					continue;
 				}
 				
 			}
@@ -708,7 +729,8 @@ function handleTap(e) {
 		}
 	}
 
-	if (mouseX >= 10 && mouseY >= 12 && mouseX <= 18 && mouseY <= 16) {
+	console.log(mouseX+","+mouseY);
+	if (mouseX >= 10 && mouseY >= 12 && mouseX <= 18 && mouseY <= 17) {
 		poweroff = !poweroff;
 		time++;
 		if (poweroff) {
