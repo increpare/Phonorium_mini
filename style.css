@@ -1,33 +1,59 @@
-html{
+html {
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-crisp-edges;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select: none;
+    /* Safari */
+    -khtml-user-select: none;
+    /* Konqueror HTML */
+    -moz-user-select: none;
+    /* Old versions of Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
+    /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
 
-  image-rendering: -moz-crisp-edges;
-  image-rendering: -webkit-crisp-edges;
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
+body {
+    background-color: #008282;
+    background: url("gfx/bg.png") repeat;
+    background-size:  50vh;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-crisp-edges;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    overflow: hidden;
+    /* Hide scrollbars */
+}
 
-		}
-		body {
-			background-color: #008282;
+:root {
+  --app-height: 100%;
+}
 
-      background: url("gfx/bg.png") center repeat-x;
-      background-size: auto 100%;
-      
+html,
+body {
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
 
-  image-rendering: -moz-crisp-edges;
-  image-rendering: -webkit-crisp-edges;
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
+  @media not all and (hover:hover) {
+      height: var(--app-height);
+  }
+}
 
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
-
-  overflow: hidden; /* Hide scrollbars */
-
-		}
-
-		canvas {  
-    width: 98vw;
-    height: 98vh;
-    object-fit: contain;
+canvas {
+  padding-top:1vh;
+  width: 98vw;
+  height: calc(var(--app-height) - 5vh);
+  object-fit: contain;
 }

@@ -39,7 +39,17 @@ let first_pattern_playthrough = false;
 let sequenz_spielend = false;
 let time = 0;
 
-function reOffset() {
+
+
+let pressed = [false, false, false, false, false, false];
+
+let offsetX, offsetY;
+
+function reOffset() {	
+	const doc = document.documentElement
+	doc.style.setProperty('--app-height', `${window.innerHeight}px`)
+
+
 	let BB = canvas.getBoundingClientRect();
 	offsetX = BB.left;
 	offsetY = BB.top;
@@ -48,10 +58,8 @@ function reOffset() {
 	ch = canvas.height;
 }
 
-let pressed = [false, false, false, false, false, false];
-
-let offsetX, offsetY;
 reOffset();
+
 window["onscroll"] = function (e) { reOffset(); }
 window["onresize"] = function (e) { reOffset(); }
 
@@ -290,12 +298,10 @@ for (let i = 0; i < image_names.length; i++) {
 }
 
 let sfx_paths = [
+	"turn_on.mp3",
+	"turn_off.mp3",
 	"error.mp3",
-	"fail.mp3",
-	"power_off.mp3",
-	"power_on.mp3",
-	"solve.mp3",
-	"win.mp3",
+	"end.mp3"
 ];
 
 let sfx = [];
@@ -518,9 +524,9 @@ async function pressButton(button_index) {
 				return;
 			}
 			if (input_pattern.toString() === sound_pattern.toString()) {
-				playAudio(sfx["solve"]);
+				playAudio(sfx["turn_on"]);
 			} else {
-				playAudio(sfx["fail"]);
+				playAudio(sfx["turn_off"]);
 			}
 			redraw();
 			for (let i = 0; i < 5; i++) {
@@ -545,7 +551,7 @@ async function pressButton(button_index) {
 					runde_phase = 0;
 					generatePattern();
 				} else {
-					playAudio(sfx["win"]);
+					playAudio(sfx["end"]);
 					winstate = true;
 				}
 			} else {
@@ -561,6 +567,15 @@ async function pressButton(button_index) {
 	}
 }
 
+function playRandom(){
+	//pick random sound progression
+	let random_progression_index = Math.floor(Math.random() * sound_progression.length);
+	let random_progression = sound_progression[random_progression_index];
+	let random_group = soundgroups[random_progression_index];
+	let random_sound_index = Math.floor(Math.random() * random_group.length);
+	let random_sound = random_group[random_sound_index];
+	playAudio(random_sound);
+}
 function doPress(i) {
 
 
@@ -571,6 +586,7 @@ function doPress(i) {
 		return;
 	}
 	if (winstate) {
+		playRandom();
 		redraw();
 		return;
 	}
@@ -652,6 +668,7 @@ function resetGame() {
 	winstate = false;
 	level = 0;
 	runde_phase = 0;
+	sequenz_spielend=false;
 	phase_1_abspiel_position = -1;
 	sound_pattern = [];
 	sounds = soundgroups[level];
@@ -669,7 +686,19 @@ function handleTap(e) {
 		let y_max = dat[2] + dat[4];
 
 		if (mouseX >= x_min && mouseX <= x_max && mouseY >= y_min && mouseY <= y_max) {
-
+			if (i<4){
+				//get centerpoint of rect
+				let x_center = x_min + (x_max - x_min) / 2;
+				let y_center = y_min + (y_max - y_min) / 2;
+				//get distance to centerpoint
+				let distance = Math.sqrt(Math.pow(x_center - mouseX, 2) + Math.pow(y_center - mouseY, 2));
+				//if distance is smaller than half of the rect's width, it's a hit
+				if (distance-2 < (x_max - x_min) / 2) {
+				} else {
+					return;
+				}
+				
+			}
 			if (target >= 0) {
 				pressed[target] = 0;
 			}
@@ -686,9 +715,9 @@ function handleTap(e) {
 			for (let i = 0; i < sounds.length; i++) {
 				sounds[i].pause();
 			}
-			playAudio(sfx["power_off"]);
+			playAudio(sfx["turn_off"]);
 		} else {
-			playAudio(sfx["power_on"]);
+			playAudio(sfx["turn_on"]);
 			resetGame();
 		}
 		redraw();
