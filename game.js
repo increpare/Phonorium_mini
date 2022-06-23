@@ -8,7 +8,7 @@ let ctx = canvas.getContext('2d');
 
 let stumm = false;
 
-let prev_phase_badpattern=null;
+let prev_phase_badpattern = null;
 
 const LEVEL_ZAHL = 10;
 const PATTERN_LAENGE = 5;
@@ -47,7 +47,7 @@ let pressed = [false, false, false, false, false, false];
 
 let offsetX, offsetY;
 
-function reOffset() {	
+function reOffset() {
 	const doc = document.documentElement
 	doc.style.setProperty('--app-height', `${window.innerHeight}px`)
 
@@ -64,7 +64,7 @@ reOffset();
 
 window["onscroll"] = function (e) { reOffset(); }
 window["onresize"] = function (e) { reOffset(); }
-if (screen && screen.orientation){
+if (screen && screen.orientation) {
 	screen.orientation.addEventListener('change', function (e) { reOffset(); });
 }
 
@@ -204,7 +204,7 @@ function redraw() {
 
 			if (runde_phase === 0) {
 				//no special treatment needed
-				if (prev_phase_badpattern!==null){
+				if (prev_phase_badpattern !== null) {
 					for (let i = 0; i < input_pattern.length; i++) {
 						if (prev_phase_badpattern[i]) {
 							ctx.drawImage(images["pattern_light_green"], 37 + 7 * i, 39);
@@ -446,17 +446,17 @@ let sound_progression = [
 ];
 
 
-let sound_paths=[];
-for (let i=0;i<sound_progression.length;i++){
+let sound_paths = [];
+for (let i = 0; i < sound_progression.length; i++) {
 	var dir = sound_progression[i];
-	let grouping=[];
+	let grouping = [];
 	//add all paths from sound_paths_flat to it that start with dir
-	for (let j=0;j<sound_paths_flat.length;j++){
-		if (sound_paths_flat[j].startsWith(dir)){
+	for (let j = 0; j < sound_paths_flat.length; j++) {
+		if (sound_paths_flat[j].startsWith(dir)) {
 			grouping.push(sound_paths_flat[j]);
 		}
 	}
-	
+
 	sound_paths.push(grouping);
 }
 
@@ -559,7 +559,7 @@ async function pressButton(button_index) {
 
 			//check if input_pattern is correct
 			if (input_pattern.toString() === sound_pattern.toString()) {
-				prev_phase_badpattern=null;
+				prev_phase_badpattern = null;
 				if (level < LEVEL_ZAHL - 1) {
 					level++;
 					sounds = soundgroups[level];
@@ -573,8 +573,8 @@ async function pressButton(button_index) {
 				if (level > 0) {
 					level--;
 				}
-				
-				prev_phase_badpattern=[];
+
+				prev_phase_badpattern = [];
 				for (let i = 0; i < input_pattern.length; i++) {
 					prev_phase_badpattern.push(input_pattern[i] === sound_pattern[i]);
 				}
@@ -588,7 +588,7 @@ async function pressButton(button_index) {
 	}
 }
 
-function playRandom(){
+function playRandom() {
 	//pick random sound progression
 	let random_progression_index = Math.floor(Math.random() * sound_progression.length);
 	let random_progression = sound_progression[random_progression_index];
@@ -598,7 +598,7 @@ function playRandom(){
 	playAudio(random_sound);
 }
 function doPress(i) {
-	prev_phase_badpattern=null;
+	prev_phase_badpattern = null;
 
 	pressed[i] = true;
 
@@ -638,7 +638,7 @@ function doPress(i) {
 				} else {
 					if (runde_phase !== 1) {
 						runde_phase = 1;
-						prev_phase_badpattern=null;
+						prev_phase_badpattern = null;
 						generatePattern();
 					}
 					//call coroutine playPattern()
@@ -690,11 +690,27 @@ function resetGame() {
 	winstate = false;
 	level = 0;
 	runde_phase = 0;
-	sequenz_spielend=false;
+	sequenz_spielend = false;
 	phase_1_abspiel_position = -1;
 	sound_pattern = [];
 	sounds = soundgroups[level];
-	prev_phase_badpattern=null;
+	prev_phase_badpattern = null;
+}
+
+function handleCursorMove(e) {
+	if (e.type === "mouseleave") {
+		document.body.style.cursor = "default";
+	} else {
+		let [mouseX, mouseY] = getMousePos(e);
+
+		if (mouseX >= 76 && mouseY >= 15 && mouseX <= 80 && mouseY <= 77) {
+			document.body.style.cursor = "pointer";
+		} else if (mouseX >= 76 && mouseY >= 85 && mouseX <= 80 && mouseY <= 115) {
+			document.body.style.cursor = "pointer";
+		} else {
+			document.body.style.cursor = "default";
+		}
+	}
 }
 
 function handleTap(e) {
@@ -709,18 +725,18 @@ function handleTap(e) {
 		let y_max = dat[2] + dat[4];
 
 		if (mouseX >= x_min && mouseX <= x_max && mouseY >= y_min && mouseY <= y_max) {
-			if (i<4){
+			if (i < 4) {
 				//get centerpoint of rect
 				let x_center = x_min + (x_max - x_min) / 2;
 				let y_center = y_min + (y_max - y_min) / 2;
 				//get distance to centerpoint
 				let distance = Math.sqrt(Math.pow(x_center - mouseX, 2) + Math.pow(y_center - mouseY, 2));
 				//if distance is smaller than half of the rect's width, it's a hit
-				if (distance-2 < (x_max - x_min) / 2) {
+				if (distance - 2 < (x_max - x_min) / 2) {
 				} else {
 					continue;
 				}
-				
+
 			}
 			if (target >= 0) {
 				pressed[target] = 0;
@@ -731,7 +747,7 @@ function handleTap(e) {
 		}
 	}
 
-	console.log(mouseX+","+mouseY);
+	console.log(mouseX + "," + mouseY);
 	if (mouseX >= 10 && mouseY >= 12 && mouseX <= 18 && mouseY <= 17) {
 		poweroff = !poweroff;
 		time++;
@@ -745,6 +761,13 @@ function handleTap(e) {
 			resetGame();
 		}
 		redraw();
+	}
+
+	if (mouseX >= 76 && mouseY >= 15 && mouseX <= 80 && mouseY <= 77) {
+		window.open("https://www.linkedin.com/in/michael-lefkowitz-46765966", "_blank");
+	}
+	if (mouseX >= 76 && mouseY >= 85 && mouseX <= 80 && mouseY <= 115) {
+		window.open("https://www.increpare.com", "_blank");
 	}
 
 }
@@ -767,5 +790,7 @@ function neighbors(x, y) {
 
 canvas.addEventListener("pointerdown", handleTap);
 canvas.addEventListener("pointerup", handleUntap);
-
+canvas.addEventListener("mousemove", handleCursorMove);
+canvas.addEventListener("mouseleave", handleCursorMove);
+canvas.addEventListener("mouseenter", handleCursorMove);
 resetGame();
