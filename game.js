@@ -703,9 +703,42 @@ function handleCursorMove(e) {
 	} else {
 		let [mouseX, mouseY] = getMousePos(e);
 
-		if (mouseX >= 76 && mouseY >= 15 && mouseX <= 80 && mouseY <= 77) {
-			document.body.style.cursor = "pointer";
-		} else if (mouseX >= 76 && mouseY >= 85 && mouseX <= 80 && mouseY <= 115) {
+		for (let i = 0; i < image_x_y.length; i++) {
+			let dat = image_x_y[i];
+			let x_min = dat[1];
+			let y_min = dat[2];
+			let x_max = dat[1] + dat[3];
+			let y_max = dat[2] + dat[4];
+	
+			if (mouseX >= x_min && mouseX <= x_max && mouseY >= y_min && mouseY <= y_max) {
+				if (i < 4) {
+					//get centerpoint of rect
+					let x_center = x_min + (x_max - x_min) / 2;
+					let y_center = y_min + (y_max - y_min) / 2;
+					//get distance to centerpoint
+					let distance = Math.sqrt(Math.pow(x_center - mouseX, 2) + Math.pow(y_center - mouseY, 2));
+					//if distance is smaller than half of the rect's width, it's a hit
+					if (distance - 2 < (x_max - x_min) / 2) {
+						document.body.style.cursor = "pointer";
+						return;
+					} else {
+						continue;
+					}
+				} else {
+					document.body.style.cursor = "pointer";
+					return;
+				}
+			}
+		}
+
+		if (
+			(mouseX >= 76 && mouseY >= 15 && mouseX <= 80 && mouseY <= 77)//name
+			||
+			(mouseX >= 76 && mouseY >= 85 && mouseX <= 80 && mouseY <= 115)//name
+			||
+			(mouseX >= 10 && mouseY >= 12 && mouseX <= 18 && mouseY <= 17)//pow
+		)	
+		{
 			document.body.style.cursor = "pointer";
 		} else {
 			document.body.style.cursor = "default";
