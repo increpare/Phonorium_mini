@@ -64,7 +64,9 @@ reOffset();
 
 window["onscroll"] = function (e) { reOffset(); }
 window["onresize"] = function (e) { reOffset(); }
-screen.orientation.addEventListener('change', function (e) { reOffset(); });
+if (screen && screen.orientation){
+	screen.orientation.addEventListener('change', function (e) { reOffset(); });
+}
 
 
 let score = 0;
